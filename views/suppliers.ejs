@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>সাপ্লায়ার তালিকা</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+    th { background: #f0f0f0; }
+    a { text-decoration: none; padding: 5px 10px; border-radius: 4px; color: white; }
+    .btn-add { background: #007bff; }
+    .btn-edit { background: #28a745; }
+    .btn-delete { background: #c0392b; }
+    .back { display: inline-block; margin-top: 15px; text-decoration: none; color: #555; }
+  </style>
+  
+</head>
+<body>
+
+<h2>👥 সাপ্লায়ার তালিকা</h2>
+
+<a href="/suppliers/add" class="btn-add">➕ নতুন সাপ্লায়ার</a>
+<br><br>
+
+<table>
+  <tr>
+    <th>নাম</th>
+    <th>মোবাইল</th>
+    <th>ঠিকানা</th>
+    <th>শুরুর বকেয়া</th>
+    <th>Action</th>
+  </tr>
+
+  <% suppliers.forEach(s => { %>
+    <tr>
+      <td><%= s.name %></td>
+      <td><%= s.mobile || "-" %></td>
+      <td><%= s.address || "-" %></td>
+      <td><%= s.openingBalance || 0 %> ৳</td>
+      <td>
+        <a href="/suppliers/edit/<%= s._id %>" class="btn-edit">✏️ Edit</a>
+        <a href="/suppliers/delete/<%= s._id %>" class="btn-delete" onclick="return confirm('ডিলিট করতে চান?')">🗑 Delete</a>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+
+<br>
+<a href="/" class="back">← ড্যাশবোর্ড</a>
+
+</body>
+</html>
+

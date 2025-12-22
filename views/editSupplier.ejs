@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>সাপ্লায়ার এডিট করুন</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
+    .form-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+    button { margin-top: 15px; padding: 10px 15px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    a { display: inline-block; margin-top: 15px; text-decoration: none; color: #555; }
+  </style>
+</head>
+<body>
+
+<div class="form-box">
+  <h2>✏️ সাপ্লায়ার এডিট করুন</h2>
+
+  <form action="/suppliers/edit/<%= supplier._id %>" method="POST">
+    <label>নাম:</label>
+    <input type="text" name="name" value="<%= supplier.name %>" required>
+
+    <label>মোবাইল:</label>
+    <input type="text" name="mobile" value="<%= supplier.mobile %>">
+
+    <label>ঠিকানা:</label>
+    <input type="text" name="address" value="<%= supplier.address %>">
+
+    <label>শুরুর বকেয়া:</label>
+    <input type="number" name="openingBalance" value="<%= supplier.openingBalance %>">
+
+    <button type="submit">Update</button>
+  </form>
+
+  <a href="/suppliers">← সাপ্লায়ার তালিকা</a>
+</div>
+
+</body>
+</html>

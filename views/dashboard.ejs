@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>ড্যাশবোর্ড</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .card p {
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #2c3e50;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      margin-right: 10px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>📊 ড্যাশবোর্ড</h1>
+  <div style="margin-bottom: 25px;">
+    <a href="/suppliers" class="btn">➕ সাপ্লায়ার যোগ করুন</a>
+    <a href="/purchases/add" class="btn">🧾 ক্রয় বিল যোগ করুন</a>
+    <a href="/purchases" class="btn">📄 সব ক্রয় দেখুন</a>
+  </div>
+
+  <!-- 🔹 SUMMARY CARDS -->
+  <div class="cards">
+
+    <!-- TOTAL DUE CARD -->
+    <div class="card">
+      <h3>💰 মোট বকেয়া</h3>
+      <p><%= totalDue %> ৳</p>
+    </div>
+
+    <!-- SUPPLIER COUNT CARD -->
+    <div class="card">
+      <h3>👥 মোট সাপ্লায়ার</h3>
+      <p><%= suppliers.length %></p>
+    </div>
+
+  </div>
+
+  <!-- 🔹 SUPPLIER TABLE -->
+  <h2>📋 সাপ্লায়ার তালিকা</h2>
+
+  <table>
+    <tr>
+      <th>নাম</th>
+      <th>মোবাইল</th>
+      <th>বর্তমান বকেয়া</th>
+    </tr>
+
+    <% suppliers.forEach(s => { %>
+      <tr>
+        <td>
+          <a href="/ledger/<%= s._id %>">
+            <%= s.name %>
+          </a>
+        </td>
+        <td><%= s.mobile %></td>
+        <td><%= s.due %> ৳</td>
+      </tr>
+    <% }) %>
+  </table>
+
+</body>
+</html>

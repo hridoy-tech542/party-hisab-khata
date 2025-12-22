@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title><%= supplier.name %> - খাতা</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+
+    .supplier-box {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .supplier-box h2 {
+      margin: 0;
+      color: #2c3e50;
+    }
+
+    .supplier-info {
+      display: flex;
+      gap: 40px;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    .debit {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .credit {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .balance {
+      font-weight: bold;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .btn.green {
+      background: #28a745;
+    }
+
+    .btn.gray {
+      background: #6c757d;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- 🔹 SUPPLIER INFO -->
+  <div class="supplier-box">
+    <h2>📒 <%= supplier.name %> এর খাতা</h2>
+
+    <div class="supplier-info">
+      <div>📞 মোবাইল: <b><%= supplier.mobile || "-" %></b></div>
+      <div>💰 শুরুর বকেয়া: <b><%= supplier.openingBalance %> ৳</b></div>
+    </div>
+
+    <div class="actions">
+      <a href="/purchases/add?supplier=<%= supplier._id %>" class="btn">🧾 ক্রয় যোগ করুন</a>
+      <a href="/payments/add/<%= supplier._id %>" class="btn green">💰 পেমেন্ট দিন</a>
+      <a href="/" class="btn gray">← ড্যাশবোর্ড</a>
+    </div>
+  </div>
+
+  <!-- 🔹 LEDGER TABLE -->
+  <table>
+    <tr>
+      <th>তারিখ</th>
+      <th>মেমো নং</th>
+      <th>বিবরণ</th>
+      <th>দেনা</th>
+      <th>জমা</th>
+      <th>ব্যালেন্স</th>
+    </tr>
+
+    <% ledger.forEach(l => { %>
+      <tr>
+        <td><%= l.date.toISOString().slice(0,10) %></td>
+
+        <td><%= l.memoNo || "-" %></td>
+
+        <td>
+          <%= l.type === "purchase" ? "ক্রয়" : "পেমেন্ট" %>
+        </td>
+
+        <td class="debit">
+          <%= l.type === "purchase" ? l.amount : "-" %>
+        </td>
+
+        <td class="credit">
+          <%= l.type === "payment" ? l.amount : "-" %>
+        </td>
+
+        <td class="balance"><%= l.balance %> ৳</td>
+      </tr>
+    <% }) %>
+  </table>
+
+</body>
+</html>
+
+

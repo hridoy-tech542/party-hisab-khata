@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>পেমেন্ট এন্ট্রি</title>
+  <style>
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      margin-right: 10px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h2>💰 পেমেন্ট জমা</h2>
+<p>সাপ্লায়ার: <b><%= supplier.name %></b></p>
+
+<form action="/payments/add" method="POST">
+  <input type="hidden" name="supplierId" value="<%= supplier._id %>">
+
+  <label>জমার পরিমাণ:</label><br>
+  <input type="number" name="amount" required><br><br>
+
+  <label>নোট:</label><br>
+  <input type="text" name="note"><br><br>
+
+  <button type="submit">জমা করুন</button>
+</form>
+
+<br>
+<a href="/ledger/<%= supplier._id %> " class="btn">← খাতায় ফিরে যান</a>
+
+<a href="/" class="btn">📊 ড্যাশবোর্ড</a>
+
+</body>
+</html>

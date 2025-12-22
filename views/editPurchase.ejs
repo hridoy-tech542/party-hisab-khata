@@ -1,0 +1,35 @@
+<h2>✏️ ক্রয় বিল এডিট</h2>
+
+<form action="/purchases/edit/<%= purchase._id %>" method="POST">
+
+  <label>সাপ্লায়ার:</label><br>
+  <select name="supplier" required>
+    <% suppliers.forEach(s => { %>
+      <option value="<%= s._id %>"
+        <%= s._id.toString() === purchase.supplier.toString() ? "selected" : "" %>>
+        <%= s.name %>
+      </option>
+    <% }) %>
+  </select><br><br>
+
+  <label>মেমো নম্বর:</label><br>
+  <input type="text" name="memoNo"
+         value="<%= purchase.memoNo %>" required><br><br>
+
+  <label>তারিখ:</label><br>
+  <input type="date" name="date"
+         value="<%= purchase.date ? purchase.date.toISOString().slice(0,10) : "" %>"><br><br>
+
+  <label>মোট টাকা:</label><br>
+  <input type="number" name="totalAmount"
+         value="<%= purchase.totalAmount %>" required><br><br>
+
+  <label>নোট:</label><br>
+  <input type="text" name="note"
+         value="<%= purchase.note %>"><br><br>
+
+  <button type="submit">Update</button>
+</form>
+
+<br>
+<a href="/purchases">← Back</a>
