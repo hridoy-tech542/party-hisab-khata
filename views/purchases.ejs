@@ -1,91 +1,141 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>সব ক্রয় বিল</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>সব ক্রয় বিল</title>
+<style>
+body{
+    margin:0;
+    font-family: system-ui;
+    background:#f3f4f6;
+    padding:15px;
+}
 
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-    }
+h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
 
-    a {
-      text-decoration: none;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin-right: 5px;
-    }
+a.btn{
+    display:inline-block;
+    margin-bottom:15px;
+    padding:10px 15px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+.btn-gray{
+    display:inline-block;
+    margin-bottom:15px;
+    padding:10px 15px;
+    background:#2b354c;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+.table-container{
+    overflow-x:auto;
+}
 
-    .btn-add { background: #007bff; }
-    .btn-edit { background: #28a745; }
-    .btn-delete { background: #c0392b; }
+table{
+    width:100%;
+    border-collapse: collapse;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+th,td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #e5e7eb;
+    font-size:14px;
+}
 
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
+th{
+    background:#f0f0f0;
+    font-weight:600;
+}
 
-    th {
-      background: #f0f0f0;
-    }
+tr:last-child td{
+    border-bottom:none;
+}
 
-    .back {
-      display: inline-block;
-      margin-top: 15px;
-      text-decoration: none;
-      color: #555;
+/* Card style for mobile */
+@media(max-width:768px){
+    table, thead, tbody, th, td, tr{
+        display:block;
     }
-  </style>
-  <link rel="stylesheet" href="/public/css/style.css">
+    tr{
+        margin-bottom:15px;
+        background:white;
+        border-radius:10px;
+        box-shadow:0 6px 15px rgba(0,0,0,.05);
+        padding:10px;
+    }
+    th{
+        display:none;
+    }
+    td{
+        text-align:left;
+        padding:6px 10px;
+        border:none;
+        position: relative;
+    }
+    td::before{
+        content: attr(data-label);
+        font-weight:600;
+        display:inline-block;
+        width:120px;
+    }
+    td a{
+        margin-right:10px;
+    }
+}
+
+</style>
 </head>
 <body>
 
-<h2>📄 সব ক্রয় বিল</h2>
+<div class="actions">
+      <a href="/purchases/add" class="btn">➕ নতুন ক্রয় যোগ করুন</a>
+      <a href="/" class="btn-gray">← ড্যাশবোর্ড</a>
+</div>
 
-<a href="/purchases/add" class="btn-add">➕ নতুন ক্রয় যোগ করুন</a>
-<br><br>
 
+<div class="table-container">
 <table>
-  <tr>
-    <th>তারিখ</th>
-    <th>মেমো নং</th>
-    <th>সাপ্লায়ার</th>
-    <th>টাকা</th>
-    <th>Action</th>
-  </tr>
-
-  <% purchases.forEach(p => { %>
+  <thead>
     <tr>
-      <td><%= p.date ? p.date.toISOString().slice(0,10) : "-" %></td>
-      <td><%= p.memoNo %></td>
-      <td><%= p.supplier ? p.supplier.name : "-" %></td>
-      <td><%= p.totalAmount %> ৳</td>
-      <td>
-        <a href="/purchases/edit/<%= p._id %>" class="btn-edit">✏️ Edit</a>
-        <a href="/purchases/delete/<%= p._id %>" class="btn-delete" onclick="return confirm('এই বিল ডিলিট করবেন?')">🗑 Delete</a>
+      <th>তারিখ</th>
+      <th>মেমো নং</th>
+      <th>সাপ্লায়ার</th>
+      <th>টাকা</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% purchases.forEach(p=>{ %>
+    <tr>
+      <td data-label="তারিখ"><%= p.date ? p.date.toISOString().slice(0,10) : "-" %></td>
+      <td data-label="মেমো নং"><%= p.memoNo %></td>
+      <td data-label="সাপ্লায়ার"><%= p.supplier ? p.supplier.name : "-" %></td>
+      <td data-label="টাকা"><%= p.totalAmount %> ৳</td>
+      <td data-label="Action">
+        <a href="/purchases/edit/<%= p._id %>">✏️ Edit</a>
+        <a href="/purchases/delete/<%= p._id %>" onclick="return confirm('এই বিল ডিলিট করবেন?')">🗑 Delete</a>
       </td>
     </tr>
   <% }) %>
+  </tbody>
 </table>
+</div>
 
-<br>
-<a href="/" class="back">← ড্যাশবোর্ড</a>
+<a href="/" class="btn-gray">← ড্যাশবোর্ড</a>
 
 </body>
 </html>
-

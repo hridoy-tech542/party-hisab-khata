@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const expressLayouts = require("express-ejs-layouts");
 const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
@@ -17,6 +17,8 @@ connectDB();
 
 // Middleware
 app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "partials/layout");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 

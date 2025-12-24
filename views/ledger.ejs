@@ -3,99 +3,132 @@
 <head>
   <meta charset="UTF-8">
   <title><%= supplier.name %> - খাতা</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/css/style.css">
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f6f8;
       padding: 20px;
+      margin: 0;
     }
 
+    /* Supplier Info Card */
     .supplier-box {
       background: white;
-      padding: 15px 20px;
+      padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .supplier-box h2 {
-      margin: 0;
+      margin: 0 0 10px 0;
       color: #2c3e50;
     }
 
     .supplier-info {
       display: flex;
-      gap: 40px;
-      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 20px;
       font-size: 15px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-
-    th {
-      background: #f0f0f0;
-    }
-
-    .debit {
-      color: #c0392b;
-      font-weight: bold;
-    }
-
-    .credit {
-      color: #27ae60;
-      font-weight: bold;
-    }
-
-    .balance {
-      font-weight: bold;
+      margin-bottom: 15px;
     }
 
     .actions {
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
     .btn {
-      padding: 8px 12px;
+      display: inline-block;
+      padding: 10px 15px;
       background: #007bff;
       color: white;
       border-radius: 5px;
       text-decoration: none;
       margin-right: 10px;
+      margin-bottom: 5px;
+      font-size: 14px;
     }
 
-    .btn.green {
-      background: #28a745;
+    .btn.green { background: #28a745; }
+    .btn.gray { background: #6c757d; }
+
+    /* Ledger Table */
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 20px;
     }
 
-    .btn.gray {
-      background: #6c757d;
+    .ledger-table th, .ledger-table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
     }
+
+    .ledger-table th {
+      background: #f0f0f0;
+    }
+
+    .debit { color: #c0392b; font-weight: bold; }
+    .credit { color: #27ae60; font-weight: bold; }
+    .balance { font-weight: bold; }
+    .mybalance{
+      background-color: yellow;
+      font-size: 20px;
+    }
+
+    /* Mobile Friendly */
+    @media (max-width: 768px) {
+      .ledger-table, .ledger-table thead, .ledger-table tbody, .ledger-table th, .ledger-table td, .ledger-table tr {
+        display: block;
+      }
+
+      .ledger-table thead tr {
+        display: none;
+      }
+
+      .ledger-table tr {
+        margin-bottom: 15px;
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
+
+      .ledger-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      .ledger-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+
   </style>
-  
 </head>
 <body>
 
   <!-- 🔹 SUPPLIER INFO -->
   <div class="supplier-box">
     <h2>📒 <%= supplier.name %> এর খাতা</h2>
-
     <div class="supplier-info">
       <div>📞 মোবাইল: <b><%= supplier.mobile || "-" %></b></div>
       <div>💰 শুরুর বকেয়া: <b><%= supplier.openingBalance %> ৳</b></div>
-    </div>
+      <div class="mybalance">🧮 বর্তমান ব্যালেন্স: <b><%= ledger.length > 0 ? ledger[ledger.length - 1].balance : supplier.openingBalance %> ৳</b></div>
 
+    </div>
     <div class="actions">
       <a href="/purchases/add?supplier=<%= supplier._id %>" class="btn">🧾 ক্রয় যোগ করুন</a>
       <a href="/payments/add/<%= supplier._id %>" class="btn green">💰 পেমেন্ট দিন</a>
@@ -104,40 +137,30 @@
   </div>
 
   <!-- 🔹 LEDGER TABLE -->
-  <table>
-    <tr>
-      <th>তারিখ</th>
-      <th>মেমো নং</th>
-      <th>বিবরণ</th>
-      <th>দেনা</th>
-      <th>জমা</th>
-      <th>ব্যালেন্স</th>
-    </tr>
-
-    <% ledger.forEach(l => { %>
+  <table class="ledger-table">
+    <thead>
       <tr>
-        <td><%= l.date.toISOString().slice(0,10) %></td>
-
-        <td><%= l.memoNo || "-" %></td>
-
-        <td>
-          <%= l.type === "purchase" ? "ক্রয়" : "পেমেন্ট" %>
-        </td>
-
-        <td class="debit">
-          <%= l.type === "purchase" ? l.amount : "-" %>
-        </td>
-
-        <td class="credit">
-          <%= l.type === "payment" ? l.amount : "-" %>
-        </td>
-
-        <td class="balance"><%= l.balance %> ৳</td>
+        <th>তারিখ</th>
+        <th>মেমো নং</th>
+        <th>বিবরণ</th>
+        <th>দেনা</th>
+        <th>জমা</th>
+        <th>ব্যালেন্স</th>
       </tr>
-    <% }) %>
+    </thead>
+    <tbody>
+      <% ledger.forEach(l => { %>
+        <tr>
+          <td data-label="তারিখ"><%= l.date.toISOString().slice(0,10) %></td>
+          <td data-label="মেমো নং"><%= l.memoNo || "-" %></td>
+          <td data-label="বিবরণ"><%= l.type === "purchase" ? "ক্রয়" : "পেমেন্ট" %></td>
+          <td data-label="দেনা" class="debit"><%= l.type === "purchase" ? l.amount : "-" %></td>
+          <td data-label="জমা" class="credit"><%= l.type === "payment" ? l.amount : "-" %></td>
+          <td data-label="ব্যালেন্স" class="balance"><%= l.balance %> ৳</td>
+        </tr>
+      <% }) %>
+    </tbody>
   </table>
 
 </body>
 </html>
-
-

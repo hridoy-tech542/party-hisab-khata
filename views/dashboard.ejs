@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>ড্যাশবোর্ড</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/public/css/style.css">
 
   <style>
     body {
@@ -14,11 +16,39 @@
 
     h1 {
       margin-bottom: 20px;
+      text-align: center;
     }
 
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      text-align: center;
+      min-width: 150px;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    /* Cards */
     .cards {
       display: flex;
+      flex-wrap: wrap;
       gap: 20px;
+      justify-content: center;
       margin-bottom: 30px;
     }
 
@@ -26,27 +56,39 @@
       background: white;
       padding: 20px;
       border-radius: 8px;
-      width: 250px;
+      width: 220px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
     }
 
     .card h3 {
       margin: 0;
-      font-size: 18px;
+      font-size: 16px;
       color: #555;
     }
 
     .card p {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: bold;
       margin-top: 10px;
       color: #2c3e50;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
+      min-width: 400px;
     }
 
     th, td {
@@ -67,18 +109,21 @@
     a:hover {
       text-decoration: underline;
     }
-    .btn {
-      display: inline-block;
-      padding: 10px 15px;
-      margin-right: 10px;
-      background: #007bff;
-      color: white;
-      border-radius: 5px;
-      font-weight: bold;
-    }
 
-    .btn:hover {
-      background: #0056b3;
+    @media (max-width: 768px) {
+      .cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 90%;
+      }
+
+      .btn-container {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
 
   </style>
@@ -86,51 +131,44 @@
 <body>
 
   <h1>📊 ড্যাশবোর্ড</h1>
-  <div style="margin-bottom: 25px;">
+
+  <div class="btn-container">
     <a href="/suppliers" class="btn">➕ সাপ্লায়ার যোগ করুন</a>
     <a href="/purchases/add" class="btn">🧾 ক্রয় বিল যোগ করুন</a>
     <a href="/purchases" class="btn">📄 সব ক্রয় দেখুন</a>
   </div>
 
-  <!-- 🔹 SUMMARY CARDS -->
+  <!-- SUMMARY CARDS -->
   <div class="cards">
-
-    <!-- TOTAL DUE CARD -->
     <div class="card">
       <h3>💰 মোট বকেয়া</h3>
       <p><%= totalDue %> ৳</p>
     </div>
-
-    <!-- SUPPLIER COUNT CARD -->
     <div class="card">
       <h3>👥 মোট সাপ্লায়ার</h3>
       <p><%= suppliers.length %></p>
     </div>
-
   </div>
 
-  <!-- 🔹 SUPPLIER TABLE -->
+  <!-- SUPPLIER TABLE -->
   <h2>📋 সাপ্লায়ার তালিকা</h2>
-
-  <table>
-    <tr>
-      <th>নাম</th>
-      <th>মোবাইল</th>
-      <th>বর্তমান বকেয়া</th>
-    </tr>
-
-    <% suppliers.forEach(s => { %>
+  <div class="table-container">
+    <table>
       <tr>
-        <td>
-          <a href="/ledger/<%= s._id %>">
-            <%= s.name %>
-          </a>
-        </td>
-        <td><%= s.mobile %></td>
-        <td><%= s.due %> ৳</td>
+        <th>নাম</th>
+        <th>মোবাইল</th>
+        <th>বর্তমান বকেয়া</th>
       </tr>
-    <% }) %>
-  </table>
+      <% suppliers.forEach(s => { %>
+        <tr>
+          <td><a href="/ledger/<%= s._id %>"><%= s.name %></a></td>
+          <td><%= s.mobile %></td>
+          <td><%= s.due %> ৳</td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
 
 </body>
 </html>
+
